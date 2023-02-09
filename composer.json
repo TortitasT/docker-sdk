@@ -1,16 +1,16 @@
 {
-    "name": "descom/skeleton",
-    "description": "package_description",
+    "name": "tortitas/docker-sdk",
+    "description": "PHP SDK for Docker API",
     "type": "library",
     "require": {
         "php": "^8.0"
     },
-    "homepage": "https://github.com/descom/skeleton",
+    "homepage": "https://github.com/tortitast/docker-sdk",
     "license": "MIT",
     "authors": [
         {
-            "name": "Cesar Garcia",
-            "email": "cesar@descom.es",
+            "name": "Victor Garcia",
+            "email": "victorgf2011@gmail.com",
             "role": "Developer"
         }
     ],
@@ -28,11 +28,11 @@
     },
     "autoload": {
         "psr-4": {
-            "Descom\\Skeleton\\": "src"
+            "Tortitas\\DockerSDK\\": "src"
         }
     },
     "scripts": {
-        "test": "vendor/bin/phpunit --colors=always",
+        "test": "vendor/bin/phpunit --colors=always --testdox",
         "style": "vendor/bin/php-cs-fixer fix",
         "analyse": "vendor/bin/phpstan analyse"
     }
