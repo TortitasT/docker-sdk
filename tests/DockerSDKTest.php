@@ -10,13 +10,15 @@ use function PHPUnit\Framework\assertEquals;
 
 class DockerSDKTest extends TestCase
 {
-  public function functionalTest()
+  public function testFunctional(): void
   {
-    $sdk = new DockerSDK();
+    $image = "docker/getting-started";
+
+    DockerSDK::pull($image);
 
     $container = new Container(
       'php-docker-sdk-test',
-      'docker/getting-started',
+      $image,
       // ['80/tcp' => new \stdClass(),],
       // [
       //   'PortBindings' => [
@@ -32,7 +34,7 @@ class DockerSDKTest extends TestCase
       ->start();
 
     $foundContainer = array_filter(
-      $sdk->list(),
+      DockerSDK::list(),
       fn ($item) => $item->name === $container->name,
     );
 

@@ -6,6 +6,14 @@ use Tortitas\DockerSDK\Helpers\Curl;
 
 class DockerSDK
 {
+  public static function pull(string $image): void
+  {
+    Curl::curl(
+      'http://localhost/v1.41/images/create?fromImage=' . $image . '',
+      'POST'
+    );
+  }
+
   public static function list(): array
   {
     $result = Curl::curl(
