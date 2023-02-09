@@ -6,6 +6,18 @@ use Tortitas\DockerSDK\Helpers\Curl;
 
 class DockerSDK
 {
+  public static function up(string $path): void
+  {
+    $command = 'docker-compose -f ' . $path . ' up -d';
+    shell_exec($command);
+  }
+
+  public static function down(string $path): void
+  {
+    $command = 'docker-compose -f ' . $path . ' down';
+    shell_exec($command);
+  }
+
   public static function pull(string $image): void
   {
     Curl::curl(
