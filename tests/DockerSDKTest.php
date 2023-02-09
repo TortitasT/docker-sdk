@@ -6,7 +6,6 @@ use PHPUnit\Framework\TestCase;
 use Tortitas\DockerSDK\Container;
 use Tortitas\DockerSDK\DockerSDK;
 
-use function PHPUnit\Framework\assertContains;
 use function PHPUnit\Framework\assertEquals;
 
 class DockerSDKTest extends TestCase
