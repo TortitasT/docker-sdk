@@ -6,104 +6,104 @@ use Tortitas\DockerSDK\Helpers\Curl;
 
 class DockerSDK
 {
-  public static function up(string $path): void
-  {
-    $command = 'docker-compose -f ' . $path . ' up -d';
-    shell_exec($command);
-  }
+    public static function up(string $path): void
+    {
+        $command = 'docker-compose -f ' . $path . ' up -d';
+        shell_exec($command);
+    }
 
-  public static function down(string $path): void
-  {
-    $command = 'docker-compose -f ' . $path . ' down';
-    shell_exec($command);
-  }
+    public static function down(string $path): void
+    {
+        $command = 'docker-compose -f ' . $path . ' down';
+        shell_exec($command);
+    }
 
-  public static function pull(string $image): void
-  {
-    Curl::curl(
-      'http://localhost/v1.41/images/create?fromImage=' . $image . '',
-      'POST'
-    );
-  }
+    public static function pull(string $image): void
+    {
+        Curl::curl(
+            'http://localhost/v1.41/images/create?fromImage=' . $image . '',
+            'POST'
+        );
+    }
 
-  public static function list(): array
-  {
-    $result = Curl::curl(
-      'http://localhost/v1.41/containers/json',
-      'GET'
-    );
-
-    $containers = array_map(
-      function ($item) {
-        $container = new Container(
-          substr($item['Names'][0], 1),
-          $item['Image'],
-          $item['Ports'],
-          $item['HostConfig']
+    public static function list(): array
+    {
+        $result = Curl::curl(
+            'http://localhost/v1.41/containers/json',
+            'GET'
         );
 
-        $container->id = $item['Id'];
+        $containers = array_map(
+            function ($item) {
+                $container = new Container(
+                    substr($item['Names'][0], 1),
+                    $item['Image'],
+                    $item['Ports'],
+                    $item['HostConfig']
+                );
 
-        return $container;
-      },
-      $result
-    );
+                $container->id = $item['Id'];
 
-    return $containers;
-  }
+                return $container;
+            },
+            $result
+        );
 
-  public static function create(Container $container)
-  {
-    $params = [
-      'Image' => $container->image,
-    ];
-
-    if (!empty($container->exposedPorts)) {
-      $params['ExposedPorts'] = $container->exposedPorts;
+        return $containers;
     }
 
-    if (!empty($container->hostConfig)) {
-      $params['HostConfig'] = $container->hostConfig;
+    public static function create(Container $container)
+    {
+        $params = [
+          'Image' => $container->image,
+        ];
+
+        if (! empty($container->exposedPorts)) {
+            $params['ExposedPorts'] = $container->exposedPorts;
+        }
+
+        if (! empty($container->hostConfig)) {
+            $params['HostConfig'] = $container->hostConfig;
+        }
+
+        $result = Curl::curl(
+            'http://localhost/v1.41/containers/create?name=' . $container->name . '',
+            'POST',
+            $params
+        );
+
+        $container->id = $result['Id'];
+
+        return $result;
     }
 
-    $result = Curl::curl(
-      'http://localhost/v1.41/containers/create?name=' . $container->name . '',
-      'POST',
-      $params
-    );
+    public static function start(Container $container)
+    {
+        $result = Curl::curl(
+            'http://localhost/v1.41/containers/' . $container->id . '/start',
+            'POST'
+        );
 
-    $container->id = $result['Id'];
+        return $result;
+    }
 
-    return $result;
-  }
+    public static function stop(Container $container)
+    {
+        $result = Curl::curl(
+            'http://localhost/v1.41/containers/' . $container->id . '/stop',
+            'POST'
+        );
 
-  public static function start(Container $container)
-  {
-    $result = Curl::curl(
-      'http://localhost/v1.41/containers/' . $container->id . '/start',
-      'POST'
-    );
+        return $result;
+    }
 
-    return $result;
-  }
+    public static function remove(Container $container)
+    {
+        $result = Curl::curl(
+            'http://localhost/v1.41/containers/' . $container->id,
+            'DELETE'
+        );
 
-  public static function stop(Container $container)
-  {
-    $result = Curl::curl(
-      'http://localhost/v1.41/containers/' . $container->id . '/stop',
-      'POST'
-    );
-
-    return $result;
-  }
-
-  public static function remove(Container $container)
-  {
-    $result = Curl::curl(
-      'http://localhost/v1.41/containers/' . $container->id,
-      'DELETE'
-    );
-
-    return $result;
-  }
+        return $result;
+    }
 }
