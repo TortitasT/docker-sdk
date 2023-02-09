@@ -45,7 +45,7 @@ jobs:
       - name: Install docker
         run: |
           sudo apt-get update
-          sudo apt-get install -y docker-ce docker-ce-cli containerd.io
+          sudo apt-get install -y moby-engine moby-cli containerd.io
 
       - name: Run test phpunit
         run: composer test
