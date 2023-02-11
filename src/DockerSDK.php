@@ -2,7 +2,6 @@
 
 namespace Tortitas\DockerSDK;
 
-use Tortitas\DockerSDK\Helpers\Curl;
 use Tortitas\DockerSDK\Versions\Docker1dot41;
 
 class DockerSDK
