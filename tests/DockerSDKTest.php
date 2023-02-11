@@ -20,19 +20,11 @@ class DockerSDKTest extends TestCase
         $container = new Container(
             'php-docker-sdk-test',
             $image,
-            // ['80/tcp' => new \stdClass(),],
-            // [
-            //   'PortBindings' => [
-      //     '80/tcp' => [
-      //       ['HostPort' => '80',],
-      //     ],
-            //   ],
-            // ],
         );
 
         $container
-          ->create()
-          ->start();
+            ->create()
+            ->start();
 
         $foundContainer = array_filter(
             DockerSDK::list(),
@@ -42,7 +34,14 @@ class DockerSDKTest extends TestCase
         assertEquals(1, count($foundContainer));
 
         $container
-          ->stop()
-          ->remove();
+            ->stop()
+            ->remove();
+    }
+
+    public function testVersion(): void
+    {
+        $version = DockerSDK::version();
+
+        assertEquals('1.41', $version['ApiVersion']);
     }
 }
