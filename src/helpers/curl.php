@@ -48,16 +48,3 @@ class Curl
         return $resultJson;
     }
 }
-
-class Command
-{
-    public static function run(string $command, array $params = [])
-    {
-        $command = 'docker ' . $command;
-        foreach ($params as $key => $value) {
-            $command .= ' ' . $key . ' ' . $value;
-        }
-
-        return shell_exec($command);
-    }
-}
