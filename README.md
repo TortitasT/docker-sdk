@@ -18,12 +18,12 @@ $image = 'nginx:latest';
 
 DockerSDK::pull($image);
 
-new Container(
+$container = new Container(
   'my-nginx-php-container', 
   $image
-  )
-  ->create()
-  ->start();
+);
+
+$container->create()->start();
 
 DockerSDK::list();
 ```
